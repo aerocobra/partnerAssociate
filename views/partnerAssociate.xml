@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+		<record id="cashadvance_seq" model="ir.sequence">
+			<field name="name">Associate code</field>
+			<field name="code">partner.associate.code.sequence</field>
+			<field name="padding">1</field>
+			<field name="prefix">ASTIC-[</field>
+			<field name="suffix">]</field>
+		</record>
+	</data>
+	<data>
+		<!-- For the form view and id field (whatever) -->
+		<record model="ir.ui.view" id="partnerAssociate_form">
+			<field name="name">partnerTransport_form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+				<header>
+					<button name="do_associate" type="object" string="Alta" class="oe_highlight"
+					attrs="{'invisible': [('x_bActive','=', True)]}"/>
+					<button name="do_DEassociate" type="object" string="Baja" class="oe_highlight"
+					attrs="{'invisible': [('x_bActive','=', False)]}"/>
+				</header>
+				<!-- folders -->
+				<notebook position="inside">
+					<page string="ASTIC" attrs="{'invisible': [('is_company','!=', True)]}">
+						<group col="6" colspan="2">
+							<group string="General data">
+								<field name="x_bActive"/>
+								<field name="x_bOldMember" attrs="{'invisible': [('x_bActive','=', True)]}"/>
+								<field name="x_bDirectionBoard"/>
+
+								<field name="x_serialAsticCode"/>
+							</group>
+							<group string="Dates">
+								<field name="x_dateSignUp"/>
+								<field name="x_dateUnsubscribe"/>
+
+								<field name="x_eUnsubscribeReason"/>
+							</group>
+							<group string="Quotes">
+								<field name="x_nAssociatedVehicles"/>
+								<field name="x_fQuotaOne"/>
+								<field name="x_fQuotaThree"/>
+							</group>
+						</group>
+						<group string="TIR" col="6" colspan="6">
+							<field name="x_nTIR_Block"/>
+							<field name="x_nTIR_Certificate"/>
+						</group>
+						<group col="6" colspan="6">
+							<field name="x_idsTIR_Endorcement" nolabel="1" readonly="0">
+								<tree string="Avales">
+									<field name="x_strNumber"/>
+									<field name="x_dateSignUp"/>
+									<field name="x_dateExpiration"/>
+									<field name="x_eType"/>
+									<field name="x_eState"/>
+									<field name="x_fAmount"/>
+								</tree>
+								<form string="Avales">
+									<field name="x_strNumber"/>
+									<field name="x_dateSignUp"/>
+									<field name="x_dateExpiration"/>
+									<field name="x_eType"/>
+									<field name="x_eState"/>
+									<field name="x_fAmount"/>
+								</form>
+							</field>
+						</group>
+					</page>
+				</notebook>
+			</field>
+		</record>
+    </data>
+</openerp>
