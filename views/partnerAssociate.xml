@@ -16,12 +16,14 @@
 			<field name="model">res.partner</field>
 			<field name="inherit_id" ref="base.view_partner_form"/>
 			<field name="arch" type="xml">
-				<header>
-					<button name="do_associate" type="object" string="Alta" class="oe_highlight"
-					attrs="{'invisible': [('x_bActive','=', True)]}"/>
-					<button name="do_DEassociate" type="object" string="Baja" class="oe_highlight"
-					attrs="{'invisible': [('x_bActive','=', False)]}"/>
-				</header>
+				<form>
+					<header>
+						<button name="do_associate" type="object" string="Alta" class="oe_highlight"
+						attrs="{'invisible': [('x_bActive','=', True)]}"/>
+						<button name="do_DEassociate" type="object" string="Baja" class="oe_highlight"
+						attrs="{'invisible': [('x_bActive','=', False)]}"/>
+					</header>
+				</form>
 				<!-- folders -->
 				<notebook position="inside">
 					<page string="ASTIC" attrs="{'invisible': [('is_company','!=', True)]}">
