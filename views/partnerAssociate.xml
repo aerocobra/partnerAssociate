@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- For the form view and id field (whatever) -->
+		<record model="ir.ui.view" id="partnerAssociate_form">
+			<!-- Name field (whatever) -->
+			<field name="name">partnerTransport_form</field>
+			<!-- Parent object -->
+			<field name="model">res.partner</field>
+			<!-- Parent View -->
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<!-- new structure in the form view -->
+			<field name="arch" type="xml">
+				<!-- folders -->
+				<notebook position="inside">
+					<page string="ASTIC" attrs="{'invisible': [('is_company','!=', True)]}">
+						<group col="6" colspan="2">
+							<group string="General data">
+								<field name="x_bActive"/>
+								<field name="x_bOldMember" attrs="{'invisible': [('x_bActive','=', True)]}"/>
+								<field name="x_bDirectionBoard"/>
+
+								<field name="x_serialAsticCode"/>
+							</group>
+							<group string="Dates">
+								<field name="x_dateSignUp"/>
+								<field name="x_dateUnsubscribe"/>
+
+								<field name="x_eUnsubscribeReason"/>
+							</group>
+							<group string="Quotes">
+								<field name="x_nAssociatedVehicles"/>
+								<field name="x_fQuotaOne"/>
+								<field name="x_fQuotaThree"/>
+							</group>
+						</group>
+						<group string="TIR" col="6" colspan="6">
+							<field name="x_nTIR_Block"/>
+							<field name="x_nTIR_Certificate"/>
+						</group>
+						<group col="6" colspan="6">
+							<field name="x_idsTIR_Endorcement" nolabel="1" readonly="0">
+								<tree string="Avales">
+									<field name="x_strNumber"/>
+									<field name="x_dateSignUp"/>
+									<field name="x_dateExpiration"/>
+									<field name="x_eType"/>
+									<field name="x_eState"/>
+									<field name="x_fAmount"/>
+								</tree>
+								<form string="Avales">
+									<field name="x_strNumber"/>
+									<field name="x_dateSignUp"/>
+									<field name="x_dateExpiration"/>
+									<field name="x_eType"/>
+									<field name="x_eState"/>
+									<field name="x_fAmount"/>
+								</form>
+							</field>
+						</group>
+					</page>
+				</notebook>
+			</field>
+		</record>
+    </data>
+</openerp>
