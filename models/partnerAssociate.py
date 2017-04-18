@@ -19,6 +19,17 @@ class partnerAssociate ( models.Model):
 																('impago', 'Impago'),
 																('voluntaria', 'Voluntaria')])
 
+	x_eState				= fields.Selection (	string = "Estado empresa",
+													compute = "compute_state",
+													store = True,
+													selection = [
+																("st_na", "No Afiliado"),
+																("st_a", "Afiliado"),
+																("st_aa", 'Antiguo Afiliado')],
+													default = "st_na"
+																)
+	
+	
 	#member position in the association
 	x_bDirectionBoard		= fields.Boolean ( string = "Junta directiva")
 
@@ -35,9 +46,22 @@ class partnerAssociate ( models.Model):
 	#member code
 	x_serialAsticCode		= fields.Char ( string = "Código", readonly=True, copy=False)
 	
+	
+	@api.one
+	def compute_state (self)
+		if self.x_bActive == True:
+			self.x_eState = "st_a"
+		else: 
+			if self.x_bOldMember == True:
+				self.x_eState = "st_aa"
+			else:
+				self.x_eState = "st_na"
+
 	@api.one
 	def do_associate ( self):
-		self.write({'x_serialAsticCode': self.env['ir.sequence'].get('partner.associate.code.sequence')})
+		if x_bOldMember != True:
+			#ver partnerAssociate.xml donde esta definida 'partner.associate.code.sequence'
+			self.write({'x_serialAsticCode': self.env['ir.sequence'].get('partner.associate.code.sequence')})
 		self.write({'x_dateSignUp': fields.Date.today()})
 		self.write({'x_bActive': True})
 
