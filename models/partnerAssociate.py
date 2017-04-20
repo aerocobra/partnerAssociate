@@ -7,6 +7,13 @@ from pygments.lexer import _inherit
 class partnerAssociate ( models.Model):
 	_inherit = "res.partner"
 
+	x_eCompanyType	= fields.Selection (	string = "Tipo sociedad",
+											selection = [
+														('sl', 'S.L.'),
+														('slu', 'S.L.U.'),
+														('sa', 'S.A.'),
+														('otro', 'Otro')])
+
 	#member state control
 	x_strState				= fields.Char ( string = "Estado", compute="show_state")
 
@@ -28,21 +35,20 @@ class partnerAssociate ( models.Model):
 	x_bDirectionBoard		= fields.Boolean ( string = "Junta directiva")
 
 	#quotas
-	x_nAssociatedVehicles	= fields.Integer ( string = "Vehículos asociados")
-	x_fQuotaOne				= fields.Float ( string = "Mensual", digits = (3,2), default=125.00)
-	x_fQuotaPerVehicle		= fields.Float ( string = "Por vehiculo", digits = (3,2), default=4.00)
-	x_fQuotaThree			= fields.Float ( string = "Trimestral", help="cuota_por_vehiculo x numero_vehiculos", digits = (3,2), compute="show_quota_three")
+	x_nAssociatedVehicles	= fields.Integer ( string = "Vehículos asociados", inverse="show_quota_three")
+	x_fQuotaOne				= fields.Float ( string = "Mensual", digits = (5,2), default=125.00)
+	x_fQuotaPerVehicle		= fields.Float ( string = "Por vehiculo", digits = (3,2), default=4.00, inverse="show_quota_three")
+	x_fQuotaThree			= fields.Float ( string = "Trimestral", help="cuota_por_vehiculo x numero_vehiculos")
 
-	#Nº autorización de transporte, codigo de 8 digitos
-	x_strAuthorizationTransport	= fields.Char ( string = "Autorización transporte", help="Nº Autorización de transporte", size=8)
-	x_nAuthorizationTransport	= field.Integer ( string = "# copias ", help="Nº de copias de autorizaciones de transporte")
-	# Nº licencia comunitaria, codigo 10 digitos
-	x_strLicenceEU				= fields.Char ( string = "Licencia comunitaria", help="Nº Licencia comunitaria", size=10)
-	#Nº autorizacion de operador tte, codigo 8 digitos
-	x_strAuthorizationOperator	= fields.Char ( string = "Autorización operador", help="Nº Autorización de operador", size=8)
-	x_nEmplyees					= field.Integer ( string = "# empleados", help="Nº de TC1/ Empleados")
-	
-	
+	#N autorización de transporte, codigo de 8 digitos
+	x_strAuthorizationTransport	= fields.Char ( string = "Autorización transporte", help="N Autorización de transporte", size=8)
+	x_nAuthorizationTransport	= fields.Integer ( string = "N copias", help="N de copias de autorizaciones de transporte")
+	#N licencia comunitaria, codigo 10 digitos
+	x_strLicenceEU				= fields.Char ( string = "Licencia comunitaria", help="N Licencia comunitaria", size=10)
+	#N autorizacion de operador tte, codigo 8 digitos
+	x_strAuthorizationOperator	= fields.Char ( string = "Autorización operador", help="N Autorización de operador", size=8)
+	x_nEmplyees					= fields.Integer ( string = "N empleados", help="N de TC1, Empleados")
+
 	#numero cuadernos del año pasado
 	x_nTIR_Block			= fields.Integer ( string = "Cuadernos TIR", help = "Numero de cuadernos TIR")
 	#numero certificados de garantia del año pasado
@@ -54,18 +60,17 @@ class partnerAssociate ( models.Model):
 
 	@api.one
 	def show_state ( self):
-		if self.x_bActive == True:
+		if self.x_bActiveMember == True:
 			self.x_strState = "Afiliado activo"
 		else:
 			if self.x_bOldMember == True:
 				self.x_strState = "Afiliado antiguo"
 			else:
 				self.x_strState = "No afiliado"
-	
-	
+
 	@api.one
 	def show_quota_three ( self):
-		self.x_fQuotaThree = self.x_nAssociatedVehicles * self.x_fQuotaOne
+		self.x_fQuotaThree = self.x_nAssociatedVehicles * self.x_fQuotaPerVehicle
 	
 	@api.one
 	def do_associate ( self):
@@ -73,10 +78,15 @@ class partnerAssociate ( models.Model):
 			#ver partnerAssociate.xml donde esta definida 'partner.associate.code.sequence'
 			self.write({'x_serialAsticCode': self.env['ir.sequence'].get('partner.associate.code.sequence')})
 		self.write({'x_dateSignUp': fields.Date.today()})
-		self.write({'x_bActive': True})
+		self.write({'x_bActiveMember': True})
+		#añadir ASTIC en pestaña Transporte
+		if not self.env["partner.transport.associations"].search([('x_idPartner','=',self.id), ('x_eAssociation','=','as1')]):
+			self.env["partner.transport.associations"].create ( {'x_idPartner': self.id, 'x_eAssociation': 'as1'})
 
 	@api.one
 	def do_DEassociate ( self):
-		self.write({'x_bActive': False})
+		self.write({'x_bActiveMember': False})
 		self.write({'x_bOldMember': True})
 		self.write({'x_dateUnsubscribe': fields.Date.today()})
+		#quitar ASTIC en pestaña Transporte
+		self.env["partner.transport.associations"].search([('x_idPartner','=',self.id)]).unlink()
