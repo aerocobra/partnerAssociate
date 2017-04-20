@@ -17,12 +17,18 @@
 			<field name="inherit_id" ref="base.view_res_partner_filter"/>
 			<field name="arch" type="xml">
 				<!-- replace default filters 2 show only associates-->
-				<filter name="customer" position="attributes">
-					<attribute name="domain">"[('is_company','=', 1), ('customer','=',1), ('x_bActive', '=', 1)]"</attribute>
-				</filter>
+				<xpath expr="/search/filter[@name='customer']" position="attributes">
+					<attribute name="domain">"[('is_company','=', True), ('x_bActiveMember', '=', True)]"</attribute>
+				</xpath>
+				<!-- filter name="customer" position="attributes">
+					<attribute name="domain">"[('is_company','=', 1), ('customer','=',1), ('x_bActiveMember', '=', 1)]"</attribute>
+				</filter -->
 				<filter name="supplier" position="attributes">
-					<attribute name="domain">"[('is_company','=', 1), ('supplier','=',1), ('x_bActive', '=', 1)]"</attribute>
+					<attribute name="domain">"[('is_company','=', 1), ('supplier','=',1), ('x_bActiveMember', '=', 1)]"</attribute>
 				</filter>
+				<search>
+					<filter name="old_member" string="Antiguos afiliados" domain="[('is_company','=', 1), ('x_bOldMember', '=', 1)]"/>
+				</search>
 			</field>
 		</record>
 	</data>
@@ -37,43 +43,54 @@
 				<!-- new header with buttons-->
 					<header>
 						<button name="do_associate" type="object" string="Alta afiliado" class="oe_highlight" confirm="Confirmar el ALTA"
-							attrs="{'invisible': [('x_bActive','=', True)]}"/>
+							attrs="{'invisible': [('x_bActiveMember','=', True)]}"/>
 						<button name="do_DEassociate" type="object" string="Baja afiliado" class="oe_highlight" confirm="Confirmar la BAJA"
-							attrs="{'invisible': [('x_bActive','=', False)]}"/>
+							attrs="{'invisible': [('x_bActiveMember','=', False)]}"/>
 					</header>
 				</xpath>
 				<!-- folders -->
 				<notebook position="inside">
-					<page string="ASTIC" attrs="{'invisible': ['|',('is_company','!=', True), '&amp;',('x_bActive', '=', False), ('x_bOldMember', '=',False)]}">
+					<page string="ASTIC" attrs="{'invisible': ['|',('is_company','!=', True), '&amp;',('x_bActiveMember', '=', False), ('x_bOldMember', '=',False)]}">
 						<group>
 							<field name="x_strState" readonly="1"/>
 						</group>
 						<group col="6" colspan="2">
 							<group string="General data">
-								<field name="x_bActive" readonly="1"/>
-								<field name="x_bOldMember" readonly="1" attrs="{'invisible': [('x_bActive','=', True)]}"/>
-								<field name="x_bDirectionBoard" attrs="{'readonly': [('x_bActive','!=', True)]}"/>
+								<field name="x_bActiveMember" readonly="1"/>
+								<field name="x_bOldMember" readonly="1" attrs="{'invisible': [('x_bActiveMember','=', True)]}"/>
+								<field name="x_bDirectionBoard" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
 
 								<field name="x_serialAsticCode"/>
 							</group>
 							<group string="Dates">
 								<field name="x_dateSignUp" readonly="1"/>
-								<field name="x_dateUnsubscribe" readonly="1" attrs="{'invisible': [('x_bActive','=', True)]}"/>
+								<field name="x_dateUnsubscribe" readonly="1" attrs="{'invisible': [('x_bActiveMember','=', True)]}"/>
 
-								<field name="x_eUnsubscribeReason" readonly="1" attrs="{'invisible': [('x_bActive','=', True)]}"/>
+								<field name="x_eUnsubscribeReason" readonly="1" attrs="{'invisible': [('x_bActiveMember','=', True)]}"/>
 							</group>
 							<group string="Quotes">
-								<field name="x_nAssociatedVehicles" attrs="{'readonly': [('x_bActive','!=', True)]}"/>
-								<field name="x_fQuotaOne" widget="monetary" attrs="{'readonly': [('x_bActive','!=', True)]}"/>
-								<field name="x_fQuotaThree" widget="monetary" attrs="{'readonly': [('x_bActive','!=', True)]}"/>
+								<field name="x_nAssociatedVehicles" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
+								<field name="x_fQuotaOne" widget="monetary" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
+								<field name="x_fQuotaThree" widget="monetary" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
 							</group>
 						</group>
-						<group string="TIR" col="6" colspan="6">
-							<field name="x_nTIR_Block" attrs="{'readonly': [('x_bActive','!=', True)]}"/>
-							<field name="x_nTIR_Certificate" attrs="{'readonly': [('x_bActive','!=', True)]}"/>
+						<group string="Dataos especiales" col="6" colspan="6">
+							<group>
+								<field name="x_nTIR_Block" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
+								<field name="x_nTIR_Certificate" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
+							</group>
+							<group>
+								<field name="x_strAuthorizationTransport" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
+								<field name="x_nAuthorizationTransport" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
+							</group>
+							<group>
+								<field name="x_strLicenceEU" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
+								<field name="x_strAuthorizationOperator" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
+								<field name="x_nEmplyees" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
+							</group>
 						</group>
 						<group col="6" colspan="6">
-							<field name="x_idsTIR_Endorcement" nolabel="1" attrs="{'readonly': [('x_bActive','!=', True)]}">
+							<field name="x_idsTIR_Endorcement" nolabel="0" attrs="{'readonly': [('x_bActiveMember','!=', True)]}">
 								<tree string="Avales">
 									<field name="x_strNumber"/>
 									<field name="x_dateSignUp"/>

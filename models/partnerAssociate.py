@@ -10,8 +10,8 @@ class partnerAssociate ( models.Model):
 	#member state control
 	x_strState				= fields.Char ( string = "Estado", compute="show_state")
 
-	x_bActive				= fields.Boolean ( string = "Activo", readonly=True)
-	x_bOldMember			= fields.Boolean ( string = "Antiguo miembro", readonly=True, default= False)
+	x_bActiveMember			= fields.Boolean ( string = "Activo afiliado", readonly=True)
+	x_bOldMember			= fields.Boolean ( string = "Antiguo afiliado", readonly=True, default= False)
 
 	#codigo asociado
 	x_serialAsticCode		= fields.Char ( string = "Código", readonly=True, copy=False)
@@ -33,8 +33,18 @@ class partnerAssociate ( models.Model):
 	x_fQuotaPerVehicle		= fields.Float ( string = "Por vehiculo", digits = (3,2), default=4.00)
 	x_fQuotaThree			= fields.Float ( string = "Trimestral", help="cuota_por_vehiculo x numero_vehiculos", digits = (3,2), compute="show_quota_three")
 
+	#Nº autorización de transporte, codigo de 8 digitos
+	x_strAuthorizationTransport	= fields.Char ( string = "Autorización transporte", help="Nº Autorización de transporte", size=8)
+	x_nAuthorizationTransport	= field.Integer ( string = "# copias ", help="Nº de copias de autorizaciones de transporte")
+	# Nº licencia comunitaria, codigo 10 digitos
+	x_strLicenceEU				= fields.Char ( string = "Licencia comunitaria", help="Nº Licencia comunitaria", size=10)
+	#Nº autorizacion de operador tte, codigo 8 digitos
+	x_strAuthorizationOperator	= fields.Char ( string = "Autorización operador", help="Nº Autorización de operador", size=8)
+	x_nEmplyees					= field.Integer ( string = "# empleados", help="Nº de TC1/ Empleados")
+	
+	
 	#numero cuadernos del año pasado
-	x_nTIR_Block			= fields.Integer ( string = "Cuadernos", help = "Numero de cuadernos TIR")
+	x_nTIR_Block			= fields.Integer ( string = "Cuadernos TIR", help = "Numero de cuadernos TIR")
 	#numero certificados de garantia del año pasado
 	x_nTIR_Certificate		= fields.Integer ( string = "Certificados de garantia", help = "Numero del anyo pasado")
 
@@ -45,12 +55,12 @@ class partnerAssociate ( models.Model):
 	@api.one
 	def show_state ( self):
 		if self.x_bActive == True:
-			self.x_strState = "Asociado activo"
+			self.x_strState = "Afiliado activo"
 		else:
 			if self.x_bOldMember == True:
-				self.x_strState = "Antiguo asociado"
+				self.x_strState = "Afiliado antiguo"
 			else:
-				self.x_strState = "No asociado"
+				self.x_strState = "No afiliado"
 	
 	
 	@api.one
