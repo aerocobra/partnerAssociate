@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="partnerUnlinkWizard_form">
+			<field name="name">partnerUnlinkWizard_form</field>
+			<field name="model">partner.unlink.wizard</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<field name="e_reason"/>
+					</sheet>
+					<footer>
+						<button name="do_unlink" type="object" string="Confirmar baja" class="oe_highlight"/>
+						<button string="Cancelar" class="btn-default" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="btn_action_partner_unlink_wizard">
+			<field name="name">btn_action_partner_unlink_wizard</field>
+			<field name="res_model">partner.unlink.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>		
+		<!-- src_model="res.partner" -->
+		<act_window id="action_partner_unlink_wizard"
+			name="action_partner_unlink_wizard"
+			src_model="res.partner"
+			res_model="partner.unlink.wizard"
+			view_mode="form"
+			target="new"
+		/>
+	</data>
+</openerp>
