@@ -17,6 +17,7 @@
     "depends": ['base'],
     "data": [
 		"views/partnerAssociate.xml",
+		"views/partnerUnlinkWizard.xml",
     ],
     "installable": True,
     "application": True,

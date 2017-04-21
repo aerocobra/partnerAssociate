@@ -44,8 +44,8 @@
 					<header>
 						<button name="do_associate" type="object" string="Alta afiliado" class="oe_highlight" confirm="Confirmar el ALTA"
 							attrs="{'invisible': [('x_bActiveMember','=', True)]}"/>
-						<button name="do_DEassociate" type="object" string="Baja afiliado" class="oe_highlight" confirm="Confirmar la BAJA"
-							attrs="{'invisible': [('x_bActiveMember','=', False)]}"/>
+						<button name="partnerAssociate.btn_action_partner_unlink_wizard" type="action" string="Baja afiliado" class="oe_highlight"
+							attrs="{'invisible': [('x_bActiveMember','!=', True)]}"/>
 					</header>
 				</xpath>
 				<xpath expr="/form/sheet/group/group/field[@name='type']" position="before">
