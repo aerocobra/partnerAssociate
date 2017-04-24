@@ -2,6 +2,7 @@
 #-*- partnerUnlinkWizard.py
 from openerp import tools
 from openerp import models, fields, api
+from openerp import exceptions
 
 class partnerUnlinkWizard ( models.TransientModel):
 	_name = "partner.unlink.wizard"
@@ -9,22 +10,31 @@ class partnerUnlinkWizard ( models.TransientModel):
 	e_reason	= fields.Selection (	string = "Seleccionar Razón baja",
 										selection = [
 													('impago', 'Impago'),
-													('voluntaria', 'Voluntaria')])
+													('voluntaria', 'Voluntaria')],
+										help="Indicar la razón de la baja"
+									)
 
 	@api.multi
 	def do_unlink ( self):
 		self.ensure_one()
 		
-#		if not self.e_reason:
-#			raise exceptions.ValidationError ( 'Es necesario indicar la razón de la baja')
+		if not self.e_reason:
+			raise exceptions.ValidationError ( 'Es necesario indicar la razón de la baja')
 		
 		#else:
+		partner_id = self.env.context.get ('active_ids', True)[0]
+		x_partner = self.env["res.partner"].search([('id','=', partner_id)])
 		
-		patner_id = self.context.get ('active_id', False)
-		
-		patner_id.write({'x_bActiveMember': False})
-		patner_id.write({'x_bOldMember': True})
-		patner_id.write({'x_dateUnsubscribe': fields.Date.today()})
-		patner_id.write({'x_eUnsubscribeReason': self.e_reason})
-		#quitar ASTIC en pestaña Transporte
-		self.env["partner.transport.associations"].search([('x_idPartner','=',self.id)]).unlink()
+		x_partner.write({'x_bActiveMember': False})
+		x_partner.write({'x_bOldMember': True})
+		x_partner.write({'x_dateUnsubscribe': fields.Date.today()})
+		x_partner.write({'x_eUnsubscribeReason': self.e_reason})
+		#quitar ASTIC en pestaña Transporte, as1 es ASTIC
+		self.env["partner.transport.associations"].search([('x_idPartner','=', partner_id), 'x_eAssociation[key]', '=', 'as1']).unlink()
+		#historial afiliación
+		self.env["partner.associate.history"].create ( {
+														'x_idPartner': partner_id,
+														'x_dateSignUp': x_partner.x_dateSignUp,
+														'x_dateUnsubscribe': x_partner.x_dateUnsubscribe,
+														'x_eUnsubscribeReason': self.e_reason
+														})

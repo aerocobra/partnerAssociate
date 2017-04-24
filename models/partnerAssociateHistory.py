@@ -11,7 +11,7 @@ class partnerAssociateHistory ( models.Model):
 
 	x_dateSignUp			= fields.Date ( string = "F Alta", readonly=True)
 	x_dateUnsubscribe		= fields.Date ( string = "F Baja", readonly=True)
-	
+
 	x_eUnsubscribeReason	= fields.Selection (	string = "Razón baja",
 													selection = [
 																('impago', 'Impago'),

@@ -7,7 +7,21 @@
 			<field name="arch" type="xml">
 				<form>
 					<sheet>
-						<field name="e_reason"/>
+						<group string="Indicar la razón de baja">
+							<field name="e_reason"/>
+						</group>
+						<group string="Nota importante">
+							<text>
+								<div>Esta a punto de dar de baja al afiliado.</div>
+								<div>al confirmar la baja se realizarán las siguinetes acciones:</div>
+								<div>1. se quitará la entrada "ASTIC" en el bloque "Asociaciones" en la pestaña "Transporte"</div>
+								<div>2. la empresa se quitara de la lista de los afiliados activos</div>
+								<div>3. la empresa se establecerá como antiguo afiliado</div>
+								<div>4. se añadirá una entrada en el historial de afiliación</div>
+								<div> </div>
+								<div><strong>IMPORTANTE: es necesario quitrar manualmente el acceso al portal a todos los contactos de la empresa</strong></div>
+							</text>
+						</group>
 					</sheet>
 					<footer>
 						<button name="do_unlink" type="object" string="Confirmar baja" class="oe_highlight"/>
@@ -17,14 +31,14 @@
 			</field>
 		</record>
 		<record model="ir.actions.act_window" id="btn_action_partner_unlink_wizard">
-			<field name="name">btn_action_partner_unlink_wizard</field>
+			<field name="name">Baja afiliado</field>
 			<field name="res_model">partner.unlink.wizard</field>
 			<field name="view_mode">form</field>
 			<field name="target">new</field>
 		</record>		
 		<!-- src_model="res.partner" -->
 		<act_window id="action_partner_unlink_wizard"
-			name="action_partner_unlink_wizard"
+			name="Baja afiliado"
 			src_model="res.partner"
 			res_model="partner.unlink.wizard"
 			view_mode="form"
