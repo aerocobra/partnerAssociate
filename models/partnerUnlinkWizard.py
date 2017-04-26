@@ -30,7 +30,14 @@ class partnerUnlinkWizard ( models.TransientModel):
 		x_partner.write({'x_dateUnsubscribe': fields.Date.today()})
 		x_partner.write({'x_eUnsubscribeReason': self.e_reason})
 		#quitar ASTIC en pestaña Transporte, as1 es ASTIC
-		self.env["partner.transport.associations"].search([('x_idPartner','=', partner_id), 'x_eAssociation[key]', '=', 'as1']).unlink()
+		i = self.env["transport.associations"].search([('x_strAssociation','=','ASTIC')])[0].id
+		if i != 1:
+			strA = "ERR UNLINK id value[" + str (i) + "]"
+			raise exceptions.ValidationError ( strA)
+
+		#if x_partner.x_idsAssociations.search([('id','=',i)]):
+		x_partner.x_idsAssociations = [( 3, i, False)]
+
 		#historial afiliación
 		self.env["partner.associate.history"].create ( {
 														'x_idPartner': partner_id,

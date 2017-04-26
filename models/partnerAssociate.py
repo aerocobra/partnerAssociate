@@ -3,6 +3,7 @@
 from openerp import tools
 from openerp import models, fields, api
 from pygments.lexer import _inherit
+from openerp import exceptions
 
 class partnerAssociate ( models.Model):
 	_inherit = "res.partner"
@@ -80,8 +81,13 @@ class partnerAssociate ( models.Model):
 		self.write({'x_dateSignUp': fields.Date.today()})
 		self.write({'x_bActiveMember': True})
 		#añadir ASTIC en pestaña Transporte
-		if not self.env["partner.transport.associations"].search([('x_idPartner','=',self.id), ('x_eAssociation','=','as1')]):
-			self.env["partner.transport.associations"].create ( {'x_idPartner': self.id, 'x_eAssociation': 'as1'})
+		i = self.env["transport.associations"].search([('x_strAssociation','=','ASTIC')])[0].id
+		if i != 1:
+			strA = "ERR ADD id value[" + str (i) + "]"
+			raise exceptions.ValidationError ( strA)
+
+		#if not self.x_idsAssociations.search([('x_strAssociation','=', 'ASTIC')]):
+		self.x_idsAssociations = [(4, i, False)]
 
 	@api.one
 	def do_DEassociate ( self):
