@@ -4,9 +4,10 @@
 		<record id="cashadvance_seq" model="ir.sequence">
 			<field name="name">Associate code</field>
 			<field name="code">partner.associate.code.sequence</field>
-			<field name="padding">1</field>
 			<field name="prefix">ASTIC-[</field>
 			<field name="suffix">]</field>
+			<field name="padding">1</field>
+			<field name="number_increment">1</field>
 		</record>
 	</data>
 	<data>
@@ -65,7 +66,7 @@
 								<field name="x_bOldMember" readonly="1" attrs="{'invisible': [('x_bActiveMember','=', True)]}"/>
 								<field name="x_bDirectionBoard" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
 
-								<field name="x_serialAsticCode"/>
+								<field name="x_serialAsticCode" widget="handle"/>
 							</group>
 							<group string="Fechas">
 								<field name="x_dateSignUp" readonly="1"/>
@@ -104,12 +105,14 @@
 									<field name="x_fAmount"/>
 								</tree>
 								<form string="Avales">
-									<field name="x_strNumber" string= "# aval"/>
-									<field name="x_dateSignUp" string= "F aval"/>
-									<field name="x_dateExpiration" string= "F vencim"/>
-									<field name="x_eType" string= "Tipo"/>
-									<field name="x_eState" string= "Estado"/>
-									<field name="x_fAmount" string= "Importe"/>
+									<group>
+										<field name="x_strNumber"/>
+										<field name="x_dateSignUp"/>
+										<field name="x_dateExpiration"/>
+										<field name="x_eType"/>
+										<field name="x_eState"/>
+										<field name="x_fAmount"/>
+									</group>
 								</form>
 							</field>
 						</group>
