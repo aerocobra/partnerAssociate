@@ -14,7 +14,10 @@
     "license": "AGPL-3",
     "website": "http://www.astic.net",
     "category": "Partner",
-    "depends": ['base'],
+    "depends":	[
+				"base",
+				"partnerTransport",
+				],
     "data": [
 		"views/partnerAssociate.xml",
 		"views/partnerUnlinkWizard.xml",
