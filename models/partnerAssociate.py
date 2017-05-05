@@ -19,14 +19,14 @@ class partnerAssociate ( models.Model):
 	#member state control
 	x_strState				= fields.Char		( string = "Estado",			compute	= "show_state")
 
-	x_bActiveMember			= fields.Boolean	( string = "Afiliado activo",	readonly = True)
-	x_bOldMember			= fields.Boolean	( string = "Antiguo afiliado",	readonly = True, default= False)
+	x_bActiveMember			= fields.Boolean	( string = "Afiliado activo")
+	x_bOldMember			= fields.Boolean	( string = "Antiguo afiliado", default= False)
 
 	#codigo asociado
-	x_serialAsticCode		= fields.Char		( string = "Código", readonly=True, copy=False)
+	x_serialAsticCode		= fields.Char		( string = "Código", copy=False)
 
-	x_dateSignUp			= fields.Date		( string = "F Alta", readonly=True, help = "fecha de la última alta")
-	x_dateUnsubscribe		= fields.Date		( string = "F Baja", readonly=True, help = "fecha de la última baja")
+	x_dateSignUp			= fields.Date		( string = "F Alta", help = "fecha de la última alta")
+	x_dateUnsubscribe		= fields.Date		( string = "F Baja", help = "fecha de la última baja")
 	
 	#OJO !!! defenido en 3 lugares
 	x_eUnsubscribeReason	= fields.Selection (	string		= "Razón baja",
