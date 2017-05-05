@@ -34,14 +34,27 @@
 		</record>
 	</data>
 	<data>
+		<!-- remove GEO tab -->
+		<record model="ir.ui.view" id="partnerRemoveGEO_form">
+			<field name="name">partnerRemoveGEO_form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base_geolocalize.view_crm_partner_geo_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/sheet/notebook/page[@name='geo_location']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+			</field>
+		</record>
+	</data>
+	<data>
 		<!-- For the form view and id field (whatever) -->
 		<record model="ir.ui.view" id="partnerAssociate_form">
 			<field name="name">partnerAssociate_form</field>
 			<field name="model">res.partner</field>
 			<field name="inherit_id" ref="base.view_partner_form"/>
 			<field name="arch" type="xml">
-				<xpath expr="/form/*" position="before">
 				<!-- new header with buttons-->
+				<xpath expr="/form/*" position="before">
 					<header>
 						<button name="do_associate" type="object" string="Alta afiliado" class="oe_highlight" confirm="Confirmar el ALTA"
 							attrs="{'invisible': ['|', ('x_bActiveMember','=', True), ('is_company','=', False)]}"/>
@@ -49,10 +62,11 @@
 							attrs="{'invisible': ['|', ('x_bActiveMember','!=', True), ('is_company','=', False)]}"/>
 					</header>
 				</xpath>
+				<!-- new field compny type-->
 				<xpath expr="/form/sheet/group/group/field[@name='type']" position="before">
 					<field name="x_eCompanyType" attrs="{'invisible': [('is_company','=', False)]}"/>
 				</xpath>
-				<!-- folders -->
+				<!-- add new folders -->
 				<notebook position="inside">
 					<page string="ASTIC" attrs="{'invisible': ['|',('is_company','!=', True), '&amp;',('x_bActiveMember', '=', False), ('x_bOldMember', '=',False)]}">
 						<group>
