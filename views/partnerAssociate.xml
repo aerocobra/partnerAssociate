@@ -2,7 +2,7 @@
 <openerp>
 	<data>
 		<record id="cashadvance_seq" model="ir.sequence">
-			<field name="name">Associate code</field>
+			<field name="name">codigo asociado ASTIC</field>
 			<field name="code">partner.associate.code.sequence</field>
 			<field name="prefix">ASTIC-[</field>
 			<field name="suffix">]</field>
@@ -46,11 +46,11 @@
 						<button name="do_associate" type="object" string="Alta afiliado" class="oe_highlight" confirm="Confirmar el ALTA"
 							attrs="{'invisible': ['|', ('x_bActiveMember','=', True), ('is_company','=', False)]}"/>
 						<button name="partnerAssociate.btn_action_partner_unlink_wizard" type="action" string="Baja afiliado" class="oe_highlight"
-							attrs="{'invisible': ['|', ('x_bActiveMember','!=', True, ('is_company','=', False))]}"/>
+							attrs="{'invisible': ['|', ('x_bActiveMember','!=', True), ('is_company','=', False)]}"/>
 					</header>
 				</xpath>
 				<xpath expr="/form/sheet/group/group/field[@name='type']" position="before">
-					<field name="x_eCompanyType"/>
+					<field name="x_eCompanyType" attrs="{'invisible': [('is_company','=', False)]}"/>
 				</xpath>
 				<!-- folders -->
 				<notebook position="inside">
@@ -66,7 +66,7 @@
 								<field name="x_bOldMember" readonly="1" attrs="{'invisible': [('x_bActiveMember','=', True)]}"/>
 								<field name="x_bDirectionBoard" attrs="{'readonly': [('x_bActiveMember','!=', True)]}"/>
 
-								<field name="x_serialAsticCode" widget="handle"/>
+								<field name="x_serialAsticCode"/>
 							</group>
 							<group string="Fechas">
 								<field name="x_dateSignUp" readonly="1"/>

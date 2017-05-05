@@ -12,7 +12,11 @@ class partnerAssociateHistory ( models.Model):
 	x_dateSignUp			= fields.Date ( string = "F Alta", readonly=True)
 	x_dateUnsubscribe		= fields.Date ( string = "F Baja", readonly=True)
 
+	#OJO !!! defenido en 3 lugares
 	x_eUnsubscribeReason	= fields.Selection (	string = "Razón baja",
 													selection = [
 																('impago', 'Impago'),
-																('voluntaria', 'Voluntaria')])
+																('voluntaria', 'Voluntaria'),
+																('cese', 'Cese actividad'),
+																('otro', 'Otro')
+																])

@@ -7,10 +7,14 @@ from openerp import exceptions
 class partnerUnlinkWizard ( models.TransientModel):
 	_name = "partner.unlink.wizard"
 
+	#OJO !!! defenido en 3 lugares
 	e_reason	= fields.Selection (	string = "Seleccionar Razón baja",
 										selection = [
 													('impago', 'Impago'),
-													('voluntaria', 'Voluntaria')],
+													('voluntaria', 'Voluntaria'),
+													('cese', 'Cese actividad'),
+													('otro', 'Otro')
+													],
 										help="Indicar la razón de la baja"
 									)
 
