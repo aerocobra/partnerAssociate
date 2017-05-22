@@ -21,7 +21,8 @@
     "data": [
 		"views/partnerAssociate.xml",
 		"views/partnerUnlinkWizard.xml",
-    ],
+		"security/ir.model.access.csv",
+	],
     "installable": True,
     "application": True,
 	"auto_install": False,

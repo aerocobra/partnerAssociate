@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_partner_associate_endorsement,partner.associate.endorsement.user,model_partner_associate_endorsement,base.group_user,1,1,1,1
+access_partner_associate_history,partner.associate.history.user,model_partner_associate_history,base.group_user,1,1,1,1
