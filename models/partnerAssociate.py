@@ -81,10 +81,13 @@ class partnerAssociate ( models.Model):
 													help			= "más reciente abajo")
 
 
+	#se seobreescribe el metodo para eliminar tambien los registros de res_users y portal_wizard_user
+	#es necesario cuando se elimina un contacto que no aparezca la excepción que no se puede eliminar
 	@api.multi
 	def unlink(self):
 		for record in self:
 			if record.is_company == False:
+				#solo para las personas
 				self.env.cr.execute("DELETE FROM portal_wizard_user WHERE partner_id=%s;" % (record.id))
 				self.env.cr.execute("DELETE FROM res_users WHERE partner_id=%s;" % (record.id))
 
