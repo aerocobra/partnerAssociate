@@ -20,6 +20,14 @@ class partnerAssociate ( models.Model):
 	x_strState				= fields.Char		( string = "Estado",			compute	= "show_state")
 
 	x_bActiveMember			= fields.Boolean	( string = "Afiliado activo")
+	x_bParentActiveMember	= fields.Boolean	(	string	= "Pertenece a empresa afiliada",
+													related = "parent_id.x_bActiveMember"
+													)
+
+	#if belongs to direction board
+	x_bDirectionBoard		= fields.Boolean ( string = "Junta directiva", help = "si pertenece o no a la junta directiva")
+	
+	
 	x_bOldMember			= fields.Boolean	( string = "Antiguo afiliado", default= False)
 
 	#codigo asociado
@@ -38,8 +46,6 @@ class partnerAssociate ( models.Model):
 																	]
 												)
 
-	#if belongs to direction board
-	x_bDirectionBoard		= fields.Boolean ( string = "Junta directiva", help = "si pertenece o no a la junta directiva")
 
 	#quotas
 	x_nAssociatedVehicles	= fields.Integer	( string = "Vehículos asociados", inverse = "show_quota_three")
@@ -73,6 +79,17 @@ class partnerAssociate ( models.Model):
 													inverse_name	= "x_idPartner",
 													string			= "Historial afiliaciones",
 													help			= "más reciente abajo")
+
+
+	@api.multi
+	def unlink(self):
+		for record in self:
+			if record.is_company == False:
+				self.env.cr.execute("DELETE FROM portal_wizard_user WHERE partner_id=%s;" % (record.id))
+				self.env.cr.execute("DELETE FROM res_users WHERE partner_id=%s;" % (record.id))
+
+		#return models.Model.unlink ( self)
+		return super( partnerAssociate, self).unlink()
 
 	@api.one
 	def show_state ( self):

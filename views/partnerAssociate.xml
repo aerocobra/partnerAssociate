@@ -4,10 +4,33 @@
 		<record id="cashadvance_seq" model="ir.sequence">
 			<field name="name">codigo asociado ASTIC</field>
 			<field name="code">partner.associate.code.sequence</field>
-			<field name="prefix">[</field>
-			<field name="suffix">]</field>
+			<field name="prefix"></field>
+			<field name="suffix"></field>
 			<field name="padding">1</field>
 			<field name="number_increment">1</field>
+		</record>
+	</data>
+	<data>
+		<!-- tree view-->
+		<record model="ir.ui.view" id="partnerAssociateTree_form">
+			<field name="name">partnerAssociateTree_form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_tree"/>
+			<field name="arch" type="xml">
+				<!-- new transport fields -->
+				<field name="display_name" position="after">
+					<field name="x_bActiveMember" invisible="1"/>
+					<field name="x_bParentActiveMember" invisible="1"/>
+				</field>
+				<tree position="attributes">
+					<attribute name="decoration-primary">
+						x_bParentActiveMember == True or x_bActiveMember==True
+					</attribute>
+					<attribute name="decoration-bf">
+						x_bActiveMember==True
+					</attribute>
+				</tree>
+			</field>
 		</record>
 	</data>
 	<data>
@@ -19,16 +42,16 @@
 			<field name="arch" type="xml">
 				<!-- replace default filters 2 show only associates-->
 				<xpath expr="/search/filter[@name='customer']" position="attributes">
-					<attribute name="domain">"[('is_company','=', True), ('x_bActiveMember', '=', True)]"</attribute>
-				</xpath>
-				<!-- filter name="customer" position="attributes">
 					<attribute name="domain">"[('is_company','=', 1), ('customer','=',1), ('x_bActiveMember', '=', 1)]"</attribute>
-				</filter -->
+				</xpath>
 				<filter name="supplier" position="attributes">
 					<attribute name="domain">"[('is_company','=', 1), ('supplier','=',1), ('x_bActiveMember', '=', 1)]"</attribute>
 				</filter>
 				<search>
 					<filter name="old_member" string="Antiguos afiliados" domain="[('is_company','=', 1), ('x_bOldMember', '=', 1)]"/>
+				</search>
+				<search>
+					<filter name="contacto_afiliado" string="Contacto afiliado" domain="[('x_bParentActiveMember','=', True)]"/>
 				</search>
 			</field>
 		</record>

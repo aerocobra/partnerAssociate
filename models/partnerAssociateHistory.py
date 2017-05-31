@@ -9,8 +9,8 @@ class partnerAssociateHistory ( models.Model):
 
 	x_idPartner			= fields.Many2one ( "res.partner")
 
-	x_dateSignUp			= fields.Date ( string = "F Alta", readonly=True)
-	x_dateUnsubscribe		= fields.Date ( string = "F Baja", readonly=True)
+	x_dateSignUp			= fields.Date ( string = "F Alta")
+	x_dateUnsubscribe		= fields.Date ( string = "F Baja")
 
 	#OJO !!! defenido en 3 lugares
 	x_eUnsubscribeReason	= fields.Selection (	string = "Razón baja",
